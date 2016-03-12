@@ -1,0 +1,17 @@
+datavolume:
+  container_name: jupyter-data
+  image: debian:latest
+  restart: on-failure:10
+  volumes:
+    - /opt/jupyter/notebooks:/notebooks/
+
+jupyter:
+  container_name: jupyter
+  image: jupyter/notebook
+  restart: on-failure:10
+  volumes_from:
+    - datavolume
+  environment:
+    - VIRTUAL_HOST=${DOCKER_JUPYTER_HOSTNAME}
+    - LETSENCRYPT_HOST=${DOCKER_JUPYTER_HOSTNAME}
+    - LETSENCRYPT_EMAIL=${DOCKER_LETSENCRYPT_EMAIL}
